@@ -32,52 +32,54 @@ import {
   LIKE_AND_UNLIKE_POST_RESET,
   LIKE_AND_UNLIKE_POST_SUCCESS,
   UPDATE_POST_FAIL,
+  UPDATE_POST_REQUEST,
   UPDATE_POST_RESET,
-  UPDATE_POST_SUCCESS,
+  UPDATE_POST_SUCCESS
 } from '../Constant'
 
 const initialState = {
   post: [],
   error: [],
   message: {},
-  user: [],
+  user: []
 }
 
-export function PostReducer(state = initialState, actions) {
+export function PostReducer (state = initialState, actions) {
   switch (actions.type) {
     case CREATE_POST_REQUEST:
-        return {
-          loading: true,
-        }
+    case UPDATE_POST_REQUEST:
+      return {
+        loading: true
+      }
     case CREATE_POST_SUCCESS:
       return {
         loading: false,
-        success: true,
+        success: true
       }
-      case  CREATE_POST_RESET:
-        return{
-          success: false,
-        }
-        case DELETE_POST_RESET:
-          return {
-            loading: false,
-            isDeleted: false,
-          }
+    case CREATE_POST_RESET:
+      return {
+        success: false
+      }
+    case DELETE_POST_RESET:
+      return {
+        loading: false,
+        isDeleted: false
+      }
 
-          case UPDATE_POST_RESET:
-            return {
-              loading: false,
-              isUpdated: false,
-            }
+    case UPDATE_POST_RESET:
+      return {
+        loading: false,
+        isUpdated: false
+      }
     case UPDATE_POST_SUCCESS:
       return {
         loading: false,
-        isUpdated: true,
+        isUpdated: true
       }
     case DELETE_POST_SUCCESS:
       return {
         loading: false,
-        isDeleted: true,
+        isDeleted: true
       }
 
     case CREATE_POST_FAIL:
@@ -85,7 +87,7 @@ export function PostReducer(state = initialState, actions) {
     case DELETE_POST_FAIL:
       return {
         loading: false,
-        error: actions.payload,
+        error: actions.payload
       }
 
     default:
@@ -93,21 +95,21 @@ export function PostReducer(state = initialState, actions) {
   }
 }
 
-export function MyPostReducer(state = initialState, actions) {
+export function MyPostReducer (state = initialState, actions) {
   switch (actions.type) {
     case GET_MY_POST_REQUEST:
       return {
-        loading: true,
+        loading: true
       }
     case GET_MY_POST_SUCCESS:
       return {
         loading: false,
-        post: actions.payload,
+        post: actions.payload
       }
     case GET_MY_POST_FAIL:
       return {
         loading: false,
-        error: actions.payload,
+        error: actions.payload
       }
 
     default:
@@ -115,24 +117,24 @@ export function MyPostReducer(state = initialState, actions) {
   }
 }
 
-export function userPostsReducer(state = initialState, actions) {
+export function userPostsReducer (state = initialState, actions) {
   switch (actions.type) {
     case GET_POST_OF_FOLLOWING_REQUEST:
     case GET_USERS_POST_REQUEST:
       return {
-        loading: true,
+        loading: true
       }
     case GET_POST_OF_FOLLOWING_SUCCESS:
     case GET_USERS_POST_SUCCESS:
       return {
         loading: false,
-        post: actions.payload,
+        post: actions.payload
       }
     case GET_POST_OF_FOLLOWING_FAIL:
     case GET_USERS_POST_FAIL:
       return {
         loading: false,
-        error: actions.payload,
+        error: actions.payload
       }
 
     default:
@@ -140,86 +142,81 @@ export function userPostsReducer(state = initialState, actions) {
   }
 }
 
-export function LikeAndCommentReducer(state = initialState, actions) {
+export function LikeAndCommentReducer (state = initialState, actions) {
   switch (actions.type) {
     case LIKE_AND_UNLIKE_POST_REQUEST:
     case COMMENT_ON_POST_REQUEST:
     case DELETE_COMMENT_POST_REQUEST:
       return {
-        loading: true,
+        loading: true
       }
     case LIKE_AND_UNLIKE_POST_SUCCESS:
     case COMMENT_ON_POST_SUCCESS:
     case DELETE_COMMENT_POST_SUCCESS:
       return {
         loading: false,
-        message: actions.payload?.message,
+        message: actions.payload?.message
       }
     case LIKE_AND_UNLIKE_POST_FAIL:
     case COMMENT_ON_POST_FAIL:
     case DELETE_COMMENT_POST_FAIL:
       return {
         loading: false,
-        error: actions.payload,
+        error: actions.payload
       }
 
-      case LIKE_AND_UNLIKE_POST_RESET:
-        return{
-          loading: false,
-          message: null
-        }
+    case LIKE_AND_UNLIKE_POST_RESET:
+      return {
+        loading: false,
+        message: null
+      }
 
     default:
       return state
   }
 }
 
-export function UserProfileReducer(state = initialState, actions) {
+export function UserProfileReducer (state = initialState, actions) {
   switch (actions.type) {
     case GET_USERS_PROFILE_REQUEST:
       return {
-        loading: true,
+        loading: true
       }
     case GET_USERS_PROFILE_SUCCESS:
       return {
         loading: false,
-        user: actions.payload,
+        user: actions.payload
       }
     case GET_USERS_PROFILE_FAIL:
       return {
         loading: false,
-        error: actions.payload,
+        error: actions.payload
       }
     default:
       return state
   }
 }
 
+export function FollowReducer (state = initialState, actions) {
+  switch (actions.type) {
+    case FOLLOW_USER_REQUEST:
+      return {
+        loading: true
+      }
 
+    case FOLLOW_USER_SUCCESS:
+      return {
+        loading: false,
+        message: actions.payload
+      }
 
+    case FOLLOW_USER_FAIL:
+      return {
+        loading: false,
+        error: actions.payload
+      }
 
-export function FollowReducer(state = initialState, actions) {
-
-switch (actions.type) {
-  case FOLLOW_USER_REQUEST:
-   return{
-    loading:true
-   }
-
-   case FOLLOW_USER_SUCCESS:
-   return{
-    loading:false,
-    message : actions.payload
-   }
-
-   case FOLLOW_USER_FAIL:
-   return{
-    loading:false,
-    error : actions.payload
-   }
-
-  default:
-    return state;
-}
-
+    default:
+      return state
   }
+}

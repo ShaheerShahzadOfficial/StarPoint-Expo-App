@@ -12,10 +12,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useDispatch } from 'react-redux'
 import { Logout } from '../Redux/Actions/Auth'
+import { DeleteProfile } from '../Redux/Actions/User'
 
 var width = Dimensions.get('screen').width
 
-export default function Setting () {
+export default function Setting ({ navigation }) {
   const refRBSheet = useRef()
   const dispatch = useDispatch()
   return (
@@ -58,16 +59,17 @@ export default function Setting () {
             borderRadius: 6
           }}
         >
-          <TouchableOpacity style={styles?.btn}>
-            <MaterialIcons
-              name={'update'}
-              size={30}
-              color={'#fff'}
-              //   style={{ margin: 2 }}
-            />
+          <TouchableOpacity
+            style={styles?.btn}
+            onPress={() => navigation?.navigate('UpdateProfile')}
+          >
+            <MaterialIcons name={'update'} size={30} color={'#fff'} />
             <Text style={styles?.profile}>Update Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles?.btn}>
+          <TouchableOpacity
+            style={styles?.btn}
+            onPress={() => navigation?.navigate('UpdatePassword')}
+          >
             <MaterialCommunityIcons
               name={'onepassword'}
               size={30}
@@ -98,7 +100,10 @@ export default function Setting () {
             borderRadius: 6
           }}
         >
-          <TouchableOpacity style={styles?.btn2}>
+          <TouchableOpacity
+            style={styles?.btn2}
+            onPress={() => dispatch(DeleteProfile())}
+          >
             {/* dangerous
              */}
             <MaterialIcons
@@ -107,7 +112,7 @@ export default function Setting () {
               color={'#fff'}
               //   style={{ margin: 2 }}
             />
-            <Text style={styles?.text}>Deactivate Account</Text>
+            <Text style={styles?.text}>Delete My Account</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>

@@ -8,9 +8,7 @@ import {
   RefreshControl,
   View
 } from 'react-native'
-import { Avatar } from 'react-native-paper'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import RBSheet from 'react-native-raw-bottom-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { MyPost } from '../Redux/Actions/Post'
 import { myProfile } from '../Redux/Actions/User'
@@ -20,7 +18,10 @@ import Setting from './Setting'
 var width = Dimensions.get('screen').width
 
 const Account = ({ navigation }) => {
-  const { loading, user } = useSelector(state => state?.Auth)
+  const refRBSheet = useRef()
+  const refRBSheet2 = useRef()
+
+  const { user } = useSelector(state => state?.Auth)
   const { post } = useSelector(state => state?.myPost)
 
   const dispatch = useDispatch()
@@ -58,7 +59,7 @@ const Account = ({ navigation }) => {
       }
     >
       <View style={styles?.container}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', marginBottom: 30 }}>
           <View
             style={{
               position: 'relative',
@@ -81,7 +82,7 @@ const Account = ({ navigation }) => {
               }}
             />
 
-            <Text style={{ textAlign: 'center', top: 12, fontSize: 20 }}>
+            <Text style={{ textAlign: 'center', top: 12, fontSize: 24 }}>
               {`${user?.name}`}
             </Text>
           </View>
@@ -95,10 +96,9 @@ const Account = ({ navigation }) => {
               left: 12
             }}
           >
-            <Setting />
+            <Setting navigation={navigation} />
           </View>
         </View>
-
         <View style={{ width: 300, flexDirection: 'row', marginTop: 20 }}>
           <View
             style={{
@@ -184,13 +184,34 @@ const Account = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
         <View style={{ marginTop: 10, marginBottom: 10 }}></View>
         {post?.posts?.map((item, i) => (
-          <Post key={i} item={item} />
+          <Post key={i} item={item} navigation={navigation} />
         ))}
 
-        {/* MyPost */}
+        {/*  Following  */}
+
+        <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={true}
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent'
+            },
+            draggableIcon: {
+              backgroundColor: '#FFF'
+            },
+            container: {
+              backgroundColor: '#000',
+              height: 320,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }
+          }}
+        >
+          <ScrollView style={{ flex: 1 }}></ScrollView>
+        </RBSheet>
       </View>
     </ScrollView>
   )

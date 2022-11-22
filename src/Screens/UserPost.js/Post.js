@@ -21,7 +21,7 @@ import { deleteComment } from '../../Redux/Actions/Post'
 var width = Dimensions.get('screen').width
 var height = Dimensions.get('screen').height
 
-const Post = ({ item }) => {
+const Post = ({ item, navigation }) => {
   const refRBSheet = useRef()
 
   const dispatch = useDispatch()
@@ -265,7 +265,14 @@ const Post = ({ item }) => {
                       }}
                     >
                       <View style={{ width: '90%' }}>
-                        <Text style={{ fontSize: 16, marginBottom: 10 }}>
+                        <Text
+                          style={{ fontSize: 16, marginBottom: 10 }}
+                          onPress={() =>
+                            navigation?.navigate('UsersProfile', {
+                              id: items?.user?._id
+                            })
+                          }
+                        >
                           {items?.user?.name}
                         </Text>
                         <Text style={{ fontSize: 20 }}>{items?.comment}</Text>

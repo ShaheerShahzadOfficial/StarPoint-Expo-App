@@ -15,6 +15,8 @@ import SearchUser from '../Screens/SearchUser'
 import HomeScreen from '../HomeScreen'
 import { LoadUser } from '../Redux/Actions/Auth'
 import UsersProfile from '../Screens/UsersProfile'
+import UpdateProfile from '../Screens/UpdateProfile/UpdateProfile'
+import UpdatePassword from '../Screens/UpdatePassword/UpdatePassword'
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
@@ -48,17 +50,11 @@ function MyTabs () {
         tabBarActiveTintColor: '#013917',
         tabBarInactiveTintColor: '#590000'
       })}
-      initialRouteName='SearchUser'
     >
       <Tab.Screen name='Home' component={Home} />
       <Tab.Screen name='Create Post' component={CreatePost} />
       <Tab.Screen name='SearchUser' component={SearchUser} />
       <Tab.Screen name='Profile' component={Account} />
-      {/* <Tab.Screen
-        name='UsersProfile'
-        component={UsersProfile}
-        options={{ headerShown: false }}
-      /> */}
     </Tab.Navigator>
   )
 }
@@ -67,21 +63,54 @@ function MyStack () {
   const { user } = useSelector(state => state?.Auth)
 
   return (
-    <Stack.Navigator
-      useLegacyImplementation
-      screenOptions={{
-        headerShown: false
-      }}
-    >
+    <Stack.Navigator useLegacyImplementation>
       {user ? (
         <>
-          <Stack.Screen name='Tabs' component={MyTabs} />
-          {/* <Stack.Screen name='UsersProfile' component={UsersProfile} /> */}
+          <Stack.Screen
+            name='Tabs'
+            component={MyTabs}
+            options={{
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name='UsersProfile'
+            component={UsersProfile}
+            options={{
+              headerShown: true,
+              headerTitle: '',
+              headerShadowVisible: false
+            }}
+          />
+          <Stack.Screen
+            name='UpdateProfile'
+            component={UpdateProfile}
+            options={{
+              headerShown: true,
+              headerTitle: 'Update Your Profile',
+              headerShadowVisible: false
+            }}
+          />
+
+          <Stack.Screen
+            name='UpdatePassword'
+            component={UpdatePassword}
+            options={{
+              headerShown: true,
+              headerTitle: 'Update Your Password',
+              headerShadowVisible: false
+            }}
+          />
         </>
       ) : (
-        // UsersProfile
         <>
-          <Stack.Screen name='HomeScreen' component={HomeScreen} />
+          <Stack.Screen
+            name='HomeScreen'
+            component={HomeScreen}
+            options={{
+              headerShown: false
+            }}
+          />
           <Stack.Screen name='Login' component={Login} />
           <Stack.Screen name='Register' component={Register} />
         </>

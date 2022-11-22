@@ -50,31 +50,32 @@ export const UpdateUserProfile = (name, email, avatar) => async dispatch => {
     })
 }
 
-export const UpdateUsersPassword = (oldPassword, newPassword) => async (dispatch) => {
-  dispatch({ type: UPDATE_PASSWORD_REQUEST })
+export const UpdateUsersPassword =
+  (oldPassword, newPassword) => async dispatch => {
+    dispatch({ type: UPDATE_PASSWORD_REQUEST })
 
-  await axios
-    .put(
-      'https://starpointbackend.vercel.app/user/updatePassword',
-      {
-        oldPassword,
-        newPassword
-      },
-      { withCredentials: true, credentials: 'include' }
-    )
-    .then(result => {
-      dispatch({
-        type: UPDATE_PASSWORD,
-        payload: result.data
+    await axios
+      .put(
+        'https://starpointbackend.vercel.app/user/updatePassword',
+        {
+          oldPassword,
+          newPassword
+        },
+        { withCredentials: true, credentials: 'include' }
+      )
+      .then(result => {
+        dispatch({
+          type: UPDATE_PASSWORD,
+          payload: result.data
+        })
       })
-    })
-    .catch(err => {
-      dispatch({
-        type: UPDATE_PASSWORD_FAIL,
-        payload: err.response.data.message
+      .catch(err => {
+        dispatch({
+          type: UPDATE_PASSWORD_FAIL,
+          payload: err.response.data.message
+        })
       })
-    })
-}
+  }
 
 export const DeleteProfile = () => async dispatch => {
   dispatch({ type: DELETE_PROFILE_REQUEST })
@@ -98,30 +99,32 @@ export const DeleteProfile = () => async dispatch => {
     })
 }
 
-export const getAllUser = (name = '') => async dispatch => {
-  try {
-    dispatch({ type: GET_All_USERS_REQUEST })
+export const getAllUser =
+  (name = '') =>
+  async dispatch => {
+    try {
+      dispatch({ type: GET_All_USERS_REQUEST })
 
-    const { data } = await axios.get(
-      `https://starpointbackend.vercel.app/user/getAllUsers?name=${name}`,
-      {
-        withCredentials: true,
-        credentials: 'include'
-      }
-    )
-    dispatch({
-      type: GET_All_USERS_SUCCESS,
-      payload: data?.users
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_All_USERS_FAIL,
-      payload: error?.response?.data
-    })
+      const { data } = await axios.get(
+        `https://starpointbackend.vercel.app/user/getAllUsers?name=${name}`,
+        {
+          withCredentials: true,
+          credentials: 'include'
+        }
+      )
+      dispatch({
+        type: GET_All_USERS_SUCCESS,
+        payload: data?.users
+      })
+    } catch (error) {
+      dispatch({
+        type: GET_All_USERS_FAIL,
+        payload: error?.response?.data
+      })
+    }
   }
-}
 
-export const getUsersProfile = (id) => async (dispatch) => {
+export const getUsersProfile = id => async dispatch => {
   try {
     const { data } = await axios.get(
       `https://starpointbackend.vercel.app/user/getUserProfile/${id}`,
@@ -142,7 +145,7 @@ export const getUsersProfile = (id) => async (dispatch) => {
   }
 }
 
-export const followAndUnfollowUser = (id) => async (dispatch) => {
+export const followAndUnfollowUser = id => async dispatch => {
   try {
     dispatch({ type: FOLLOW_USER_REQUEST })
 
@@ -165,8 +168,7 @@ export const followAndUnfollowUser = (id) => async (dispatch) => {
   }
 }
 
-
-export const myProfile = () => async (dispatch) => {
+export const myProfile = () => async dispatch => {
   try {
     const { data } = await axios.get(
       `https://starpointbackend.vercel.app/user/myProfile`,
@@ -176,7 +178,7 @@ export const myProfile = () => async (dispatch) => {
       }
     )
     dispatch({
-      type: MY_PROFILE ,
+      type: MY_PROFILE,
       payload: data?.user
     })
   } catch (error) {

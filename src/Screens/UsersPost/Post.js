@@ -14,28 +14,17 @@ import {
 import { Avatar } from 'react-native-paper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  addComment,
-  deleteComment,
-  MyPost,
-  Like,
-  updateCaption,
-  DeletePost
-} from '../../Redux/Actions/Post'
-import {
-  DELETE_POST_RESET,
-  LIKE_AND_UNLIKE_POST_RESET,
-  UPDATE_POST_RESET
-} from '../../Redux/Constant'
+import { addComment, deleteComment, Like } from '../../Redux/Actions/Post'
+import { LIKE_AND_UNLIKE_POST_RESET } from '../../Redux/Constant'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { getUsersProfile } from '../../Redux/Actions/User'
 
 var width = Dimensions.get('screen').width
 var height = Dimensions.get('screen').height
 
-const Post = ({ item, navigation }) => {
+const Post = ({ id, item, User, navigation }) => {
   const refRBSheet = useRef()
-  const refRBSheet2 = useRef()
 
   const dispatch = useDispatch()
 
@@ -44,49 +33,28 @@ const Post = ({ item, navigation }) => {
 
   const { user } = useSelector(state => state.Auth)
   const { message } = useSelector(state => state.like)
-  const { isDeleted, isUpdated, loading } = useSelector(state => state.post)
-
-  useEffect(() => {
-    if (isDeleted) {
-      dispatch({ type: DELETE_POST_RESET })
-      dispatch(MyPost())
-    }
-    if (isUpdated) {
-      dispatch({ type: UPDATE_POST_RESET })
-      refRBSheet2.current.close()
-      dispatch(MyPost())
-    }
-  }, [dispatch, isDeleted, isUpdated])
 
   useEffect(() => {
     if (message === 'Post Unliked') {
       setLikedPost(false)
-      dispatch({
-        type: LIKE_AND_UNLIKE_POST_RESET
-      })
     }
 
     if (message !== null) {
-      dispatch(MyPost())
+      dispatch(getUsersProfile(id))
       dispatch({
         type: LIKE_AND_UNLIKE_POST_RESET
       })
     }
-  }, [dispatch, message, user._id, isDeleted])
-  useEffect(() => {
-    const interval = setInterval(() => {
-      item?.likes?.forEach(items => {
-        if (items._id === user?._id) {
-          setLikedPost(true)
-        }
-      })
-    }, 1000)
+  }, [dispatch, id, message])
 
-    return () => clearInterval(interval)
+  useEffect(() => {
+    item?.likes.forEach(items => {
+      if (items === user?._id) {
+        setLikedPost(true)
+      }
+    })
   }, [user?._id, item?.likes, item])
 
-  const [Caption, setCaption] = useState('')
-  const [id, setId] = useState('')
   return (
     <View style={{ marginTop: 10, marginBottom: 10 }}>
       <View
@@ -100,77 +68,26 @@ const Post = ({ item, navigation }) => {
         }}
       >
         <View style={{ flexDirection: 'row', padding: 10 }}>
-          <View style={{ width: width / 1.5, flexDirection: 'row' }}>
+          <View style={{ width: width, flexDirection: 'row' }}>
             <Avatar.Image
-              size={60}
+              size={80}
               source={{
-                uri: item?.owner?.avatar?.url
+                uri: User?.avatar?.url
               }}
             />
             <Text
               style={{
                 fontSize: 20,
+                marginTop: 20,
                 marginLeft: 20
               }}
             >
-              {item?.owner?.name}
+              {User?.name}
             </Text>
-          </View>
-          <View style={{ top: 6, marginLeft: 20 }}>
-            <TouchableOpacity
-              onPress={() =>
-                Alert.alert('', 'What Do You Want To Do', [
-                  {
-                    text: 'Edit Post',
-                    style: 'default',
-                    onPress: () => {
-                      refRBSheet2.current.open()
-                      setCaption(item?.caption)
-                      setId(item?._id)
-                    }
-                  },
-                  {
-                    text: 'Delete Post',
-                    style: 'destructive',
-                    onPress: () => {
-                      Alert.alert('', 'Are You Sure You To Delete This Post', [
-                        {
-                          text: 'Cancel',
-                          style: 'cancel'
-                        },
-                        {
-                          text: 'Delete It',
-                          style: 'destructive',
-                          onPress: () => {
-                            dispatch(DeletePost(item?._id))
-                          }
-                        }
-                      ])
-                    }
-                    // dispatch(deleteComment(item._id, items._id))
-                  }
-                ])
-              }
-            >
-              <MaterialCommunityIcons
-                name={'dots-vertical'}
-                size={40}
-                color={'#590000'}
-                style={{ textAlign: 'center' }}
-              />
-            </TouchableOpacity>
           </View>
         </View>
         <View style={styles?.Postcontainer}>
-          <Text
-            style={{
-              fontSize: 20,
-              margin: 10,
-              textAlign: 'justify',
-              color: '#303030',
-              fontFamily: 'monospace'
-            }}
-          >
+          <Text style={{ fontSize: 20, margin: 10, textAlign: 'justify' }}>
             {item?.caption}
           </Text>
 
@@ -269,7 +186,7 @@ const Post = ({ item, navigation }) => {
                     placeholder='Comment'
                   />
                   <TouchableOpacity
-                    style={styles?.btn2}
+                    style={styles?.btn}
                     onPress={() => {
                       if (comment !== '') {
                         dispatch(addComment(item._id, comment))
@@ -313,6 +230,7 @@ const Post = ({ item, navigation }) => {
                             width: '50%',
                             margin: 50
                           }}
+                          onPress={() => refRBSheet.current.open()}
                         />
                         <Text style={{ fontSize: 20, color: '#FFF' }}>
                           Be the first to comment
@@ -325,8 +243,7 @@ const Post = ({ item, navigation }) => {
                           style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            marginLeft: 14
+                            justifyContent: 'flex-start'
                           }}
                         >
                           <Avatar.Image
@@ -360,99 +277,45 @@ const Post = ({ item, navigation }) => {
                                 {items?.comment}
                               </Text>
                             </View>
-                            <View style={{ width: '10%' }}>
-                              <TouchableOpacity
-                                onPress={() =>
-                                  Alert.alert(
-                                    '',
-                                    'Are You Sure You Want To Delete This Comment',
-                                    [
-                                      {
-                                        text: 'Cancel',
-                                        style: 'cancel'
-                                      },
-                                      {
-                                        text: 'Delete It',
-                                        style: 'destructive',
-                                        onPress: () =>
-                                          dispatch(
-                                            deleteComment(item._id, items._id)
-                                          )
-                                      }
-                                    ]
-                                  )
-                                }
-                              >
-                                <MaterialCommunityIcons
-                                  name={'dots-vertical'}
-                                  size={40}
-                                  color={'#590000'}
-                                  style={{ textAlign: 'center' }}
-                                />
-                              </TouchableOpacity>
-                            </View>
+                            {items?.user?._id === user?._id ? (
+                              <View style={{ width: '10%' }}>
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    Alert.alert(
+                                      '',
+                                      'Are You Sure You Want To Delete This Comment',
+                                      [
+                                        {
+                                          text: 'Cancel',
+                                          style: 'cancel'
+                                        },
+                                        {
+                                          text: 'Delete It',
+                                          style: 'destructive',
+                                          onPress: () =>
+                                            dispatch(
+                                              deleteComment(item._id, items._id)
+                                            )
+                                        }
+                                      ]
+                                    )
+                                  }
+                                >
+                                  <MaterialCommunityIcons
+                                    name={'dots-vertical'}
+                                    size={40}
+                                    color={'#590000'}
+                                    style={{ textAlign: 'center' }}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            ) : null}
                           </View>
                         </View>
                       ))
                     )}
                   </View>
                 </ScrollView>
-              </View>
-            </RBSheet>
-
-            <RBSheet
-              ref={refRBSheet2}
-              closeOnPressMask={true}
-              dragFromTopOnly={true}
-              closeOnDragDown={true}
-              customStyles={{
-                wrapper: {
-                  backgroundColor: '#9897972b'
-                },
-                draggableIcon: {
-                  backgroundColor: '#FFF',
-                  position: 'relative'
-                },
-                container: {
-                  backgroundColor: '#00627d',
-                  minHeight: height / 2,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }
-              }}
-            >
-              <View
-                style={{
-                  minHeight: height / 2.2,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setCaption}
-                  value={Caption}
-                  placeholder='Name'
-                  placeholderTextColor='#0070FF'
-                  textContentType='password'
-                />
-                <TouchableOpacity
-                  style={styles?.btn}
-                  disabled={loading ? true : false}
-                  onPress={() => {
-                    dispatch(updateCaption(id, Caption))
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontSize: 20,
-                      textAlign: 'center'
-                    }}
-                  >
-                    {loading ? 'Updating Please Wait' : 'Update Cation'}
-                  </Text>
-                </TouchableOpacity>
               </View>
             </RBSheet>
           </View>
@@ -477,28 +340,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   input: {
+    // marginLeft: 'auto',
     marginBottom: 10,
     backgroundColor: '#fff',
     color: '#000',
     fontSize: 20,
     height: 60,
-    width: width / 1.2,
+    width: width / 1.36,
     marginLeft: 10,
     padding: 16,
-    borderRadius: 10,
-    borderWidth: 2
-  },
-  btn: {
-    backgroundColor: '#000',
-    height: 60,
-    marginTop: 20,
-    marginLeft: 10,
-    padding: 14,
-    width: width / 1.2,
     borderRadius: 10
   },
-  btn2: {
+  btn: {
+    color: '#000',
     height: 60,
+    top: -6,
+    marginLeft: 10,
     padding: 14,
     borderRadius: 10
   }

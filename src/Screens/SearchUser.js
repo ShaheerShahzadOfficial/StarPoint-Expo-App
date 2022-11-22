@@ -54,26 +54,28 @@ const SearchUser = ({ navigation }) => {
           <View>
             {users &&
               users?.map((user, i) => (
-                <View
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('UsersProfile', {
+                      id: user?._id
+                    })
+                  }}
                   key={i}
                   style={{
                     alignItems: 'flex-start',
                     justifyContent: 'flex-start',
-                    width: width / 1.6,
+                    width: width / 1.2,
                     marginTop: 20,
                     flexDirection: 'row'
                   }}
                 >
-                  <Avatar.Image size={60} source={{ uri: user?.avatar?.url }} />
+                  <Avatar.Image size={70} source={{ uri: user?.avatar?.url }} />
                   <Text
-                    onLongPress={navigation.navigate('UsersProfile', {
-                      id: user?._id
-                    })}
                     style={{ textAlign: 'center', fontSize: 20, margin: 16 }}
                   >
                     {user?.name}
                   </Text>
-                </View>
+                </TouchableOpacity>
               ))}
           </View>
         </View>

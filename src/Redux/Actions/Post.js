@@ -15,6 +15,7 @@ import {
   LIKE_AND_UNLIKE_POST_FAIL,
   LIKE_AND_UNLIKE_POST_SUCCESS,
   UPDATE_POST_FAIL,
+  UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS
 } from '../Constant'
 
@@ -179,6 +180,9 @@ export const deleteComment = (id, commentId) => async dispatch => {
 }
 
 export const updateCaption = (id, caption) => async dispatch => {
+  dispatch({
+    type: UPDATE_POST_REQUEST
+  })
   await axios
     .put(
       `https://starpointbackend.vercel.app/post/updateCaption/${id}`,

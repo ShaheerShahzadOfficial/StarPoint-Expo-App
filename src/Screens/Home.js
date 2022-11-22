@@ -20,6 +20,7 @@ var height = Dimensions.get('screen').height
 
 const Home = ({ navigation }) => {
   const { post, loading } = useSelector(state => state.userPost)
+  const { user } = useSelector(state => state?.Auth)
 
   const dispatch = useDispatch()
 
@@ -52,8 +53,7 @@ const Home = ({ navigation }) => {
             size={60}
             style={{ elevation: 20 }}
             source={{
-              uri:
-                'https://res.cloudinary.com/shaheerdev/image/upload/v1667677099/SocialAppAvatar/l3isadcqxarilbkprb8c.png'
+              uri: user?.avatar?.url
             }}
           />
           <TouchableOpacity
@@ -67,7 +67,7 @@ const Home = ({ navigation }) => {
                 fontSize: 16
               }}
             >
-              What's on your mind, Shaheer?
+              What's on your mind, {user?.name}?
             </Text>
           </TouchableOpacity>
         </View>
@@ -80,7 +80,9 @@ const Home = ({ navigation }) => {
               </Text>
             </View>
           ) : (
-            post?.map((item, i) => <Post key={i} item={item} />)
+            post?.map((item, i) => (
+              <Post key={i} item={item} navigation={navigation} />
+            ))
           )}
         </View>
       </View>

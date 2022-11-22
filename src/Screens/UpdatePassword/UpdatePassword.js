@@ -11,26 +11,30 @@ import {
   View
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { LoginUser } from '../Redux/Actions/Auth'
+import { UpdateUsersPassword } from '../../Redux/Actions/User'
 
-const Login = () => {
-  const [Email, setEmail] = useState('')
-  const [Password, setPassword] = useState('')
+const UpdatePassword = () => {
+  const [NewPassword, setNewPassword] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
 
   const dispatch = useDispatch()
-  const { loading, error } = useSelector(state => state?.Auth)
+  const { loading } = useSelector(state => state?.Auth)
 
-  useEffect(() => {
-    if (error?.msg === 'You Are Not Registered User') {
-      Alert.alert('', 'You Are Not Registered User')
-    }
-  }, [error])
-
-  const login = () => {
-    if (Email !== '' && Password !== '') {
-      dispatch(LoginUser(Email, Password))
+  const updatePassword = () => {
+    if (NewPassword !== '' && ConfirmPassword !== '') {
+      if (NewPassword !== oldPassword) {
+        dispatch(UpdateUsersPassword(oldPassword, NewPassword))
+      } else {
+        ToastAndroid.show(
+          `Old Password And New Password Can't Be Same`,
+          ToastAndroid.CENTER
+        )
+      }
     } else {
-      ToastAndroid.show('Email And Password Are Required', ToastAndroid.CENTER)
+      ToastAndroid.show(
+        'Old Password And New Password Are Required',
+        ToastAndroid.CENTER
+      )
     }
   }
 
@@ -38,24 +42,25 @@ const Login = () => {
     <ScrollView style={{ backgroundColor: '#0CEBEB' }}>
       <View style={styles?.container}>
         <Image
-          style={{ width: 300, height: 300 }}
-          source={require('../../assets/splash.png')}
+          style={{ width: 300, height: 300, marginTop: 20 }}
+          source={require('../../../assets/splash.png')}
         />
 
         <View style={{ marginTop: 16 }}>
           <TextInput
             style={styles.input}
-            onChangeText={setEmail}
-            value={Email}
-            placeholder='Email'
+            onChangeText={setOldPassword}
+            value={oldPassword}
+            placeholder='Old Password'
             placeholderTextColor='#0070FF'
-            textContentType='emailAddress'
+            textContentType='password'
+            secureTextEntry={true}
           />
           <TextInput
             style={styles.input}
-            onChangeText={setPassword}
-            value={Password}
-            placeholder='Password'
+            onChangeText={setNewPassword}
+            value={NewPassword}
+            placeholder='New Password'
             placeholderTextColor='#0070FF'
             textContentType='password'
             secureTextEntry={true}
@@ -66,10 +71,10 @@ const Login = () => {
           <TouchableOpacity
             style={styles?.btn}
             disabled={loading ? true : false}
-            onPress={login}
+            onPress={updatePassword}
           >
             <Text style={{ fontSize: 20, color: '#fff', textAlign: 'center' }}>
-              {loading ? 'Please Wait' : ' Login'}
+              {loading ? 'Updating Please Wait' : ' Update Password'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -78,7 +83,7 @@ const Login = () => {
   )
 }
 
-export default Login
+export default UpdatePassword
 
 const styles = StyleSheet.create({
   container: {
