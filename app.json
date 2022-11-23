@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "StarPoint",
+    "name": "Star Point",
     "slug": "StarPoint",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shaheershahzad.StarPoint"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +33,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "3f024909-b209-4d7b-a8ce-cfcbdd43a4ad"
+        "projectId": "6853c84c-fd9d-4ab1-bc9d-6b4d2a83952d"
       }
     }
   }

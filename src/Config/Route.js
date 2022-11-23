@@ -17,6 +17,8 @@ import { LoadUser } from '../Redux/Actions/Auth'
 import UsersProfile from '../Screens/UsersProfile'
 import UpdateProfile from '../Screens/UpdateProfile/UpdateProfile'
 import UpdatePassword from '../Screens/UpdatePassword/UpdatePassword'
+import Follower from '../Screens/Follower/Follower'
+import Following from '../Screens/Following/Following'
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
@@ -82,6 +84,26 @@ function MyStack () {
               headerShadowVisible: false
             }}
           />
+          <Stack.Screen
+            name='Follower'
+            component={Follower}
+            options={{
+              headerShown: true,
+              headerTitle: 'Followers List',
+              headerShadowVisible: false
+            }}
+          />
+
+          <Stack.Screen
+            name='Following'
+            component={Following}
+            options={{
+              headerShown: true,
+              headerTitle: 'Following List',
+              headerShadowVisible: false
+            }}
+          />
+
           <Stack.Screen
             name='UpdateProfile'
             component={UpdateProfile}

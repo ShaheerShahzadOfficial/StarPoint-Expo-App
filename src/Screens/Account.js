@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import { useDispatch, useSelector } from 'react-redux'
@@ -100,7 +101,10 @@ const Account = ({ navigation }) => {
           </View>
         </View>
         <View style={{ width: 300, flexDirection: 'row', marginTop: 20 }}>
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation?.navigate('Follower', { Followers: user?.followers })
+            }
             style={{
               width: 100,
               padding: 10,
@@ -126,9 +130,12 @@ const Account = ({ navigation }) => {
             >
               {user?.followers?.length}
             </Text>
-          </View>
+          </TouchableOpacity>
 
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation?.navigate('Following', { Followings: user?.following })
+            }
             style={{
               width: 100,
               padding: 10,
@@ -154,7 +161,7 @@ const Account = ({ navigation }) => {
             >
               {user?.following?.length}
             </Text>
-          </View>
+          </TouchableOpacity>
 
           <View
             style={{

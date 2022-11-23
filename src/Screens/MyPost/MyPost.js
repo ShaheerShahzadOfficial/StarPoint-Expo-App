@@ -466,7 +466,6 @@ export default Post
 
 const styles = StyleSheet.create({
   Postcontainer: {
-    // padding: 10,
     flex: 2,
     width: '100%'
   },
@@ -485,8 +484,7 @@ const styles = StyleSheet.create({
     width: width / 1.2,
     marginLeft: 10,
     padding: 16,
-    borderRadius: 10,
-    borderWidth: 2
+    borderRadius: 10
   },
   btn: {
     backgroundColor: '#000',

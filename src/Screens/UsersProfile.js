@@ -118,7 +118,12 @@ const UsersProfile = ({ route, navigation }) => {
         </View>
 
         <View style={{ width: 300, flexDirection: 'row', marginTop: 20 }}>
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation?.navigate('Follower', {
+                Followers: user?.users?.followers
+              })
+            }
             style={{
               width: 100,
               padding: 10,
@@ -144,9 +149,14 @@ const UsersProfile = ({ route, navigation }) => {
             >
               {user?.users?.followers?.length}
             </Text>
-          </View>
+          </TouchableOpacity>
 
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation?.navigate('Following', {
+                Followings: user?.users?.following
+              })
+            }
             style={{
               width: 100,
               padding: 10,
@@ -172,7 +182,7 @@ const UsersProfile = ({ route, navigation }) => {
             >
               {user?.users?.following?.length}
             </Text>
-          </View>
+          </TouchableOpacity>
 
           <View
             style={{
